@@ -71,7 +71,7 @@
       "cobro_ger": 560728
     },
     "2": {
-      "abonos": 17303213,
+      "abonos": "26665213",
       "deuda_ant": 1190000,
       "lc": 8405668,
       "proyectos": 17217891,
@@ -422,6 +422,6 @@
     }
   },
   "comentarios": {},
-  "updated_at": "2026-04-22T04:26:07.502Z",
-  "updated_by": "Nicolas"
+  "updated_at": "2026-04-22T18:07:35.195Z",
+  "updated_by": "Gisela"
 }
