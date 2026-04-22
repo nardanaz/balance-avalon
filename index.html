@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avalon P&L</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { font-family: 'Poppins', sans-serif; background: #111; color: #e8e8e8; min-height: 100vh; }
+  input, button, textarea { font-family: inherit; }
+  button { cursor: pointer; }
+  input:focus, textarea:focus { outline: none; }
+  #root { padding: 1.25rem; max-width: 1400px; margin: 0 auto; }
+  .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .login-box { background: #1c1c1c; border: 1px solid #2e2e2e; border-radius: 8px; padding: 2rem; width: 360px; }
+  .login-box h1 { font-family: 'Unbounded', sans-serif; font-size: 14px; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .login-box .sub { font-size: 9px; color: #888; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .login-box label { display: block; font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; margin-top: 14px; }
+  .login-box input { width: 100%; padding: 10px 12px; background: #111; border: 1px solid #2e2e2e; border-radius: 4px; color: #e8e8e8; font-size: 13px; }
+  .login-box button { width: 100%; margin-top: 20px; padding: 12px; background: #7d03ff22; border: 1px solid #7d03ff; color: #7d03ff; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 11px; }
+  .login-box button:hover { background: #7d03ff44; }
+  .login-box .err { color: #ff4444; font-size: 11px; margin-top: 10px; text-align: center; }
+  .login-box .help { font-size: 10px; color: #888; margin-top: 16px; line-height: 1.5; }
+  .login-box a { color: #7d03ff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="root"><div style="text-align:center;padding:3rem;color:#888;font-size:11px;letter-spacing:0.1em;">CARGANDO...</div></div>
+
+<script>
+// ==================== CONFIG ====================
+const PASSWORD = "avalon2026";
+const REPO_OWNER = "nardanaz01";        // AJUSTAR si tu usuario de GitHub es otro
+const REPO_NAME  = "balance-avalon";
+const DATA_FILE  = "data.json";
+const BRANCH     = "main";
+
+// ==================== DATA MODEL ====================
+const CONCEPTOS = [
+  { id:"abonos",        label:"Abonos + LC Avalon",       cat:"ingreso" },
+  { id:"deuda_ant",     label:"Deuda anterior",           cat:"ingreso" },
+  { id:"lc",            label:"LC",                        cat:"ingreso" },
+  { id:"proyectos",     label:"Proyectos",                 cat:"ingreso" },
+  { id:"sueldos",       label:"Sueldos",                   cat:"egreso_fijo" },
+  { id:"sueldos_socios",label:"Sueldos socios",            cat:"egreso_fijo" },
+  { id:"cargas_soc",    label:"Cargas sociales",           cat:"egreso_fijo" },
+  { id:"logistica",     label:"Logística Nacho",           cat:"egreso_fijo" },
+  { id:"partner",       label:"Partner terciarizado",      cat:"egreso_fijo" },
+  { id:"cursos",        label:"Cursos",                    cat:"egreso_fijo" },
+  { id:"pub_meta",      label:"Publicidad Meta (+35%)",    cat:"plataformas" },
+  { id:"pub_google",    label:"Publicidad Google (+35%)",  cat:"plataformas" },
+  { id:"gsuite",        label:"Mails Gsuite",              cat:"plataformas" },
+  { id:"dashbo",        label:"Dashbo",                    cat:"plataformas" },
+  { id:"linkedin",      label:"LinkedIn",                  cat:"plataformas" },
+  { id:"webs",          label:"Webs y similares",          cat:"plataformas" },
+  { id:"gamma",         label:"Gamma (Anual)",             cat:"plataformas" },
+  { id:"luma",          label:"Luma Labs (Anual)",         cat:"plataformas" },
+  { id:"envialosimple", label:"EnvíaloSimple",             cat:"plataformas" },
+  { id:"gdrive",        label:"Google Drive",              cat:"plataformas" },
+  { id:"manychat",      label:"ManyChat",                  cat:"plataformas" },
+  { id:"kommo",         label:"Kommo (Anual)",             cat:"plataformas" },
+  { id:"n8n",           label:"N8N + Claude + Eleven",     cat:"plataformas" },
+  { id:"contagram",     label:"Contagram",                 cat:"plataformas" },
+  { id:"asana",         label:"Asana (Anual)",             cat:"plataformas" },
+  { id:"limpieza",      label:"Limpieza",                  cat:"egreso_op" },
+  { id:"contador",      label:"Contador / Legales",        cat:"egreso_op" },
+  { id:"gtos_oficina",  label:"Gastos Oficina",            cat:"egreso_op" },
+  { id:"viajes",        label:"Viajes de Negocios",        cat:"egreso_op" },
+  { id:"gtos_rh",       label:"Gastos RH",                 cat:"egreso_op" },
+  { id:"caja_chica",    label:"Caja Chica",                cat:"egreso_op" },
+  { id:"deudores_pp",   label:"Deudores Pauta Pub.",       cat:"egreso_op" },
+  { id:"cobro_ger",     label:"Cobro Ger (Dif. sueldo)",   cat:"otros" },
+];
+const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const CAT_META = {
+  ingreso:    { label:"Ingresos",           color:"#00ff00" },
+  egreso_fijo:{ label:"Egresos fijos",      color:"#ff7939" },
+  plataformas:{ label:"Plataformas / SaaS", color:"#7d03ff" },
+  egreso_op:  { label:"Operativos",         color:"#ff7939" },
+  otros:      { label:"Otros",              color:"#888"    },
+};
+const B = { bg:"#111", surface:"#1c1c1c", card:"#242424", border:"#2e2e2e", purple:"#7d03ff", orange:"#ff7939", green:"#00ff00", white:"#fff", muted:"#888", text:"#e8e8e8" };
+
+function makeEmptyData() {
+  const d = {};
+  MESES.forEach((_, i) => { d[i] = {}; CONCEPTOS.forEach(c => { d[i][c.id] = 0; }); });
+  return d;
+}
+function makeSeedData() {
+  const d = makeEmptyData();
+  Object.assign(d[11], { abonos:22686868, lc:9452459, sueldos:27848546, sueldos_socios:4000000, cargas_soc:680894, logistica:26500, partner:58800, cursos:212000, pub_meta:738157, pub_google:978729, gsuite:828230, dashbo:163952, linkedin:20000, manychat:21675, contagram:73604, limpieza:48000, contador:1094082, gtos_oficina:1140354, viajes:235159, gtos_rh:10691856, deudores_pp:7904956, cobro_ger:1532505 });
+  Object.assign(d[0], { abonos:23314309, lc:6232682, proyectos:3068183, sueldos:17111436, sueldos_socios:4000000, cargas_soc:385817, logistica:46000, partner:606250, cursos:212000, pub_meta:712265, pub_google:1150541, gsuite:789450, dashbo:163952, linkedin:20000, webs:1111500, gamma:128250, luma:14250, envialosimple:11300, gdrive:1465, manychat:45600, kommo:356250, contagram:39724, limpieza:84745, contador:1124714, gtos_oficina:1086829, viajes:235159, gtos_rh:436644, caja_chica:100000, deudores_pp:-2680662, cobro_ger:1532505 });
+  Object.assign(d[1], { abonos:15369769, deuda_ant:9233957, lc:7024793, sueldos:21353597, sueldos_socios:5000000, cargas_soc:445334, logistica:28000, partner:150000, pub_meta:727448, pub_google:1025858, gsuite:789450, dashbo:163952, linkedin:39000, webs:1111500, envialosimple:11300, gdrive:1465, manychat:45600, contagram:39724, limpieza:30400, contador:1157331, gtos_oficina:83818, viajes:235159, gtos_rh:90500, deudores_pp:1815000, cobro_ger:560728 });
+  Object.assign(d[2], { abonos:17303213, deuda_ant:1190000, lc:8405668, proyectos:17217891, sueldos:22591932, sueldos_socios:5000000, cargas_soc:350097, logistica:37500, partner:410200, pub_meta:1184313, pub_google:316611, gsuite:445200, dashbo:198382, linkedin:39000, luma:1400, envialosimple:11300, gdrive:84000, manychat:44798, n8n:39200, contagram:39724, limpieza:50000, contador:1190894, gtos_oficina:1243399, caja_chica:100000, deudores_pp:907500, cobro_ger:560728 });
+  return d;
+}
+const num = v => Number(String(v||"").replace(/[^0-9.-]/g,"")) || 0;
+const fmt = v => { const n = Math.round(Number(v||0)); if (!n) return "—"; return (n<0?"-":"")+"$"+Math.abs(n).toLocaleString("es-AR"); };
+
+function calcMes(data, i) {
+  const d = data[i] || {};
+  const ingresos = CONCEPTOS.filter(c=>c.cat==="ingreso").reduce((s,c)=>s+num(d[c.id]),0);
+  const egresos  = CONCEPTOS.filter(c=>c.cat!=="ingreso"&&c.cat!=="otros").reduce((s,c)=>s+num(d[c.id]),0);
+  const cobro    = num(d["cobro_ger"]);
+  const margen   = ingresos - egresos;
+  const gerson   = (margen / 2) - cobro;
+  return { ingresos, egresos, margen, gerson };
+}
+
+// ==================== GITHUB API ====================
+async function ghGet(token) {
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}?ref=${BRANCH}`;
+  const res = await fetch(url, { headers: { "Authorization":`Bearer ${token}`, "Accept":"application/vnd.github+json" }});
+  if (res.status === 404) return { data: null, sha: null };
+  if (!res.ok) throw new Error("GitHub GET: " + res.status);
+  const j = await res.json();
+  const raw = atob(j.content.replace(/\n/g,""));
+  const decoded = decodeURIComponent(escape(raw));
+  return { data: JSON.parse(decoded), sha: j.sha };
+}
+async function ghPut(token, payload, sha, message) {
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+  const body = { message, content, branch: BRANCH };
+  if (sha) body.sha = sha;
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { "Authorization":`Bearer ${token}`, "Accept":"application/vnd.github+json", "Content-Type":"application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) { const t = await res.text(); throw new Error("GitHub PUT: " + res.status + " " + t); }
+  return await res.json();
+}
+
+// ==================== STATE ====================
+let state = {
+  auth: false,
+  token: localStorage.getItem("avalon_gh_token") || "",
+  user:  localStorage.getItem("avalon_user") || "",
+  data: null,
+  comentarios: {},
+  sha: null,
+  mes: new Date().getMonth(),
+  tab: "carga",
+  aiText: "",
+  aiLoading: false,
+  aiResult: null,
+  saveStatus: null,
+  updatedAt: null,
+  updatedBy: null,
+};
+let saveTimer = null;
+
+// ==================== RENDER ====================
+const $root = document.getElementById("root");
+
+function renderLogin(errMsg) {
+  $root.innerHTML = `
+    <div class="login-container">
+      <div class="login-box">
+        <h1>AVALON</h1>
+        <div class="sub">BALANCE P&L — LOGIN</div>
+        <label>Tu nombre</label>
+        <input id="login-user" type="text" value="${state.user}" placeholder="Nicolas, Gerson..." />
+        <label>Contraseña</label>
+        <input id="login-pass" type="password" placeholder="••••••••" />
+        <label>GitHub Token ${state.token?'<span style="color:#00ff00">(guardado)</span>':''}</label>
+        <input id="login-token" type="password" value="${state.token}" placeholder="github_pat_..." />
+        <button id="login-btn">Entrar</button>
+        ${errMsg ? `<div class="err">${errMsg}</div>` : ""}
+        <div class="help">
+          La contraseña y el token se guardan solo en tu navegador.<br>
+          Si no tenés token: <a href="https://github.com/settings/tokens?type=beta" target="_blank">generá uno</a> con permiso Contents:Read&amp;Write sobre <code>${REPO_NAME}</code>.
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("login-btn").onclick = doLogin;
+  document.getElementById("login-pass").addEventListener("keydown", e => { if (e.key==="Enter") doLogin(); });
+}
+
+async function doLogin() {
+  const pass  = document.getElementById("login-pass").value;
+  const user  = document.getElementById("login-user").value.trim();
+  const token = document.getElementById("login-token").value.trim();
+  if (pass !== PASSWORD) return renderLogin("Contraseña incorrecta");
+  if (!user) return renderLogin("Ingresá tu nombre");
+  if (!token) return renderLogin("Falta el GitHub token");
+  localStorage.setItem("avalon_gh_token", token);
+  localStorage.setItem("avalon_user", user);
+  state.token = token; state.user = user;
+  renderLoading("Conectando con GitHub...");
+  try {
+    const res = await ghGet(token);
+    if (res.data) {
+      state.data = res.data.data || makeSeedData();
+      state.comentarios = res.data.comentarios || {};
+      state.updatedAt = res.data.updated_at || null;
+      state.updatedBy = res.data.updated_by || null;
+      state.sha = res.sha;
+    } else {
+      state.data = makeSeedData();
+      state.comentarios = {};
+      // crear data.json por primera vez
+      const payload = { data: state.data, comentarios: {}, updated_at: new Date().toISOString(), updated_by: user };
+      const put = await ghPut(token, payload, null, `[${user}] inicialización`);
+      state.sha = put.content.sha;
+      state.updatedAt = payload.updated_at;
+      state.updatedBy = user;
+    }
+    state.auth = true;
+    renderApp();
+  } catch (err) {
+    renderLogin("Error: " + err.message);
+  }
+}
+
+function renderLoading(msg) {
+  $root.innerHTML = `<div style="text-align:center;padding:3rem;color:${B.muted};font-size:11px;letter-spacing:0.1em;">${msg||"CARGANDO..."}</div>`;
+}
+
+function persist() {
+  state.saveStatus = "saving"; renderApp(true);
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      const payload = { data: state.data, comentarios: state.comentarios, updated_at: new Date().toISOString(), updated_by: state.user };
+      const put = await ghPut(state.token, payload, state.sha, `[${state.user}] actualización ${new Date().toLocaleString("es-AR")}`);
+      state.sha = put.content.sha;
+      state.updatedAt = payload.updated_at;
+      state.updatedBy = state.user;
+      state.saveStatus = "saved";
+      renderApp(true);
+      setTimeout(() => { state.saveStatus = null; renderApp(true); }, 2500);
+    } catch (err) {
+      state.saveStatus = "error: " + err.message;
+      renderApp(true);
+    }
+  }, 900);
+}
+
+function tagStyle(color) {
+  return `display:inline-block;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:${color};border:1px solid ${color};border-radius:3px;padding:2px 6px;margin-bottom:8px;`;
+}
+
+function renderApp(preserveFocus) {
+  const activeId = preserveFocus && document.activeElement ? document.activeElement.id : null;
+  const activeSelStart = preserveFocus && document.activeElement && document.activeElement.selectionStart;
+  const stats = calcMes(state.data, state.mes);
+  const chartData = MESES.map((_,i) => calcMes(state.data, i));
+  const maxV = Math.max(...chartData.map(d => Math.max(d.ingresos, d.egresos)), 1);
+  const BH = 90;
+
+  const catGroups = ["ingreso","egreso_fijo","plataformas","egreso_op","otros"].map(cat => ({
+    cat, ...CAT_META[cat], items: CONCEPTOS.filter(c => c.cat === cat)
+  }));
+
+  const saveInfo = state.saveStatus === "saving" ? `<span style="color:${B.muted}">guardando...</span>`
+                 : state.saveStatus === "saved"  ? `<span style="color:${B.green}">✓ guardado en GitHub</span>`
+                 : (state.saveStatus && state.saveStatus.startsWith("error")) ? `<span style="color:#ff4444">${state.saveStatus}</span>`
+                 : state.updatedBy ? `<span style="color:${B.muted}">últ. cambio: ${state.updatedBy} · ${new Date(state.updatedAt).toLocaleString("es-AR",{dateStyle:"short",timeStyle:"short"})}</span>`
+                 : `<span style="color:${B.muted}">*** REVOLUCIÓN DIGITAL ***</span>`;
+
+  $root.innerHTML = `
+    <!-- HEADER -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid ${B.border}">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="32" height="20" viewBox="0 0 120 72"><polygon points="0,72 28,0 42,0 14,72" fill="${B.purple}"/><polygon points="48,72 62,32 70,72" fill="${B.purple}"/><rect x="78" y="42" width="42" height="10" fill="${B.purple}"/><rect x="78" y="58" width="42" height="10" fill="${B.purple}"/><line x1="78" y1="12" x2="120" y2="42" stroke="${B.purple}" stroke-width="10"/></svg>
+        <div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:${B.white};letter-spacing:0.05em">AVALON</div>
+          <div style="font-size:9px;color:${B.muted};letter-spacing:0.12em;text-transform:uppercase;margin-top:-2px">World Agency · ${state.user}</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Unbounded',sans-serif;font-size:10px;color:${B.purple};letter-spacing:0.08em">BALANCE P&amp;L</div>
+        <div style="font-size:9px;margin-top:2px">${saveInfo}</div>
+      </div>
+    </div>
+
+    <!-- MESES -->
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1.25rem">
+      ${MESES.map((m,i)=>{ const s=chartData[i]; const has=s.ingresos>0||s.egresos>0; const act=state.mes===i;
+        return `<button data-mes="${i}" class="btn-mes" style="padding:4px 10px;font-size:9px;font-weight:${act?600:400};letter-spacing:0.06em;text-transform:uppercase;border-radius:3px;border:1px solid ${act?B.purple:B.border};background:${act?B.purple+'22':'transparent'};color:${act?B.purple:(has?B.text:B.muted)}">${m.slice(0,3)}${has?' ·':''}</button>`;
+      }).join("")}
+    </div>
+
+    <!-- KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.25rem">
+      ${[
+        {l:"Ingresos", v:stats.ingresos, c:B.green, tag:"INGRESO"},
+        {l:"Egresos", v:stats.egresos, c:B.orange, tag:"EGRESO"},
+        {l:"Margen bruto", v:stats.margen, c:stats.margen>=0?B.green:B.orange, tag:"MARGEN"},
+        {l:"Ganancia por Gerson", v:stats.gerson, c:stats.gerson>=0?B.green:B.orange, tag:"GERSON"},
+      ].map(k => `
+        <div style="background:${B.card};border-radius:6px;padding:12px 14px;border:1px solid ${B.border};position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:${k.c};opacity:0.8"></div>
+          <div style="${tagStyle(k.c)}">${k.tag}</div>
+          <div style="font-size:9px;color:${B.muted};margin-bottom:4px">${k.l}</div>
+          <div style="font-size:16px;font-weight:600;color:${k.c};font-family:'Unbounded',sans-serif;letter-spacing:-0.02em">${fmt(k.v)}</div>
+        </div>`).join("")}
+    </div>
+
+    <!-- CHART -->
+    <div style="background:${B.card};border-radius:8px;padding:14px;margin-bottom:1.25rem;border:1px solid ${B.border}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-family:'Unbounded',sans-serif;font-size:9px;color:${B.muted};letter-spacing:0.1em;text-transform:uppercase">Evolución anual</span>
+        <div style="display:flex;gap:12px;font-size:9px;color:${B.muted}">
+          <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:2px;background:${B.green};display:inline-block"></span>Ingresos</span>
+          <span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:2px;background:${B.orange};display:inline-block"></span>Egresos</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:${BH+16}px">
+        ${MESES.map((m,i)=>{ const s=chartData[i]; const iH=s.ingresos?Math.max(2,(s.ingresos/maxV)*BH):0; const eH=s.egresos?Math.max(2,(s.egresos/maxV)*BH):0; const act=state.mes===i;
+          return `<div data-chart="${i}" class="chart-bar" style="flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;gap:2px">
+            <div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:${BH}px">
+              <div style="flex:1;background:${B.green};border-radius:2px 2px 0 0;height:${iH}px;opacity:${act?1:0.3}"></div>
+              <div style="flex:1;background:${B.orange};border-radius:2px 2px 0 0;height:${eH}px;opacity:${act?1:0.3}"></div>
+            </div>
+            <span style="font-size:7px;color:${act?B.purple:B.muted};font-weight:${act?600:400};letter-spacing:0.05em;text-transform:uppercase">${m.slice(0,3)}</span>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div style="display:flex;gap:4px;margin-bottom:1rem;border-bottom:1px solid ${B.border};padding-bottom:10px">
+      ${[["carga","Carga"],["excel","Excel"],["ai","IA ***"]].map(([k,l])=>`
+        <button data-tab="${k}" class="btn-tab" style="font-size:9px;padding:5px 14px;border-radius:3px;font-weight:${state.tab===k?600:400};letter-spacing:0.08em;text-transform:uppercase;border:1px solid ${state.tab===k?B.purple:B.border};background:${state.tab===k?B.purple+'33':'transparent'};color:${state.tab===k?B.purple:B.muted}">${l}</button>`).join("")}
+      <span style="margin-left:auto;font-size:9px;color:${B.muted};align-self:center">${MESES[state.mes]}</span>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="tab-content"></div>
+
+    <!-- FOOTER -->
+    <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid ${B.border};display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:8px;color:${B.muted};letter-spacing:0.12em">REVOLUCIÓN * DIGITAL * AVALON WORLD AGENCY</span>
+      <button id="logout-btn" style="background:none;border:1px solid ${B.border};color:${B.muted};padding:3px 10px;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;border-radius:3px">Salir</button>
+    </div>
+  `;
+
+  // TAB CONTENT
+  const $tab = document.getElementById("tab-content");
+  if (state.tab === "carga") {
+    $tab.innerHTML = catGroups.map(({cat,label,color,items}) => `
+      <div style="margin-bottom:1.25rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid ${B.border}">
+          <span style="font-size:9px;font-weight:600;color:${color};letter-spacing:0.1em;text-transform:uppercase;font-family:'Unbounded',sans-serif">${label}</span>
+          <span style="font-size:11px;color:${color};font-weight:600">${fmt(items.reduce((s,c)=>s+num(state.data[state.mes][c.id]),0))}</span>
+        </div>
+        ${items.map(c => `
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <div style="width:4px;height:4px;border-radius:50%;background:${color};flex-shrink:0;opacity:0.7"></div>
+            <span style="font-size:11px;color:${B.muted};flex:0 0 185px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.label}</span>
+            <input id="val-${c.id}" data-id="${c.id}" class="inp-val" type="number" value="${state.data[state.mes][c.id]||''}" placeholder="0" style="width:110px;text-align:right;font-size:11px;padding:5px 8px;border-radius:4px;border:1px solid ${B.border};background:#111;color:${B.text}">
+            <input id="com-${c.id}" data-id="${c.id}" class="inp-com" type="text" value="${(state.comentarios[state.mes+'_'+c.id]||'').replace(/"/g,'&quot;')}" placeholder="comentario..." style="flex:1;font-size:11px;padding:5px 8px;border-radius:4px;border:1px solid ${B.border};background:#111;color:${B.muted}">
+          </div>`).join("")}
+      </div>`).join("");
+  } else if (state.tab === "excel") {
+    $tab.innerHTML = `
+      <div style="padding:1rem 0">
+        <div style="${tagStyle(B.purple)}">IMPORT</div>
+        <p style="font-size:12px;color:${B.muted};margin:8px 0 1rem;line-height:1.6">Subí el BALANCE GENERAL - AVALON.xlsx. Los conceptos se mapean automáticamente.</p>
+        <input id="file-input" type="file" accept=".xlsx,.xls,.csv" style="display:none">
+        <button id="file-btn" style="padding:10px 20px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;border:1px solid ${B.purple};background:${B.purple}22;color:${B.purple}">Seleccionar archivo</button>
+      </div>`;
+  } else if (state.tab === "ai") {
+    $tab.innerHTML = `
+      <div>
+        <div style="${tagStyle(B.green)}">*** IA</div>
+        <p style="font-size:12px;color:${B.muted};margin:8px 0 1rem;line-height:1.6">Pegá cualquier texto con datos del balance. La IA extrae los valores automáticamente.</p>
+        <textarea id="ai-text" placeholder="Ej: En marzo tuvimos sueldos por $22M, abonos $18M..." style="width:100%;min-height:90px;resize:vertical;font-size:12px;padding:10px;border-radius:4px;border:1px solid ${B.border};background:#111;color:${B.text}">${state.aiText}</textarea>
+        <button id="ai-btn" style="margin-top:8px;padding:10px 20px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;border:1px solid ${B.green};background:${B.green}22;color:${B.green}" ${state.aiLoading||!state.aiText.trim()?'disabled':''}>${state.aiLoading?'Procesando...':'Extraer con IA'}</button>
+        ${state.aiResult ? `
+          <div style="margin-top:1rem;background:${B.card};border-radius:6px;padding:1rem;border:1px solid ${B.purple}">
+            <div style="${tagStyle(B.purple)}">RESULTADO</div>
+            <p style="font-size:12px;font-weight:500;margin:6px 0 8px;color:${B.text}">${state.aiResult.mes?`Datos para ${MESES[state.aiResult.mes-1]}`:'Valores detectados'}:</p>
+            ${Object.entries(state.aiResult.valores||{}).filter(([,v])=>v).map(([k,v])=>{ const c=CONCEPTOS.find(x=>x.id===k); return c?`<p style="font-size:11px;color:${B.muted};margin:2px 0">${c.label}: <span style="color:${B.green};font-weight:600">${fmt(v)}</span></p>`:''; }).join("")}
+            <button id="ai-apply" style="margin-top:12px;padding:8px 16px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;border:none;background:${B.purple};color:#fff">Aplicar al balance</button>
+          </div>` : ''}
+      </div>`;
+  }
+
+  attachHandlers();
+  if (activeId) { const el = document.getElementById(activeId); if (el) { el.focus(); if (activeSelStart != null && el.setSelectionRange) { try { el.setSelectionRange(activeSelStart, activeSelStart); } catch(e){} } } }
+}
+
+function attachHandlers() {
+  document.querySelectorAll(".btn-mes").forEach(b => b.onclick = () => { state.mes = Number(b.dataset.mes); renderApp(); });
+  document.querySelectorAll(".chart-bar").forEach(b => b.onclick = () => { state.mes = Number(b.dataset.chart); renderApp(); });
+  document.querySelectorAll(".btn-tab").forEach(b => b.onclick = () => { state.tab = b.dataset.tab; renderApp(); });
+  document.querySelectorAll(".inp-val").forEach(inp => inp.oninput = e => { state.data[state.mes][e.target.dataset.id] = e.target.value; persist(); });
+  document.querySelectorAll(".inp-com").forEach(inp => inp.oninput = e => { state.comentarios[state.mes+'_'+e.target.dataset.id] = e.target.value; persist(); });
+  const lo = document.getElementById("logout-btn"); if (lo) lo.onclick = () => { localStorage.removeItem("avalon_gh_token"); state.auth=false; state.token=""; renderLogin(); };
+  const fb = document.getElementById("file-btn"); if (fb) fb.onclick = () => document.getElementById("file-input").click();
+  const fi = document.getElementById("file-input"); if (fi) fi.onchange = handleExcel;
+  const at = document.getElementById("ai-text"); if (at) at.oninput = e => { state.aiText = e.target.value; };
+  const ab = document.getElementById("ai-btn"); if (ab) ab.onclick = parseAI;
+  const ap = document.getElementById("ai-apply"); if (ap) ap.onclick = applyAI;
+}
+
+function matchConcepto(label) {
+  const l = (label||"").toLowerCase().trim();
+  return CONCEPTOS.find(c => { const cl = c.label.toLowerCase(); return cl===l || (l.length>4 && (cl.includes(l.split(" ")[0]) || l.includes(cl.split(" ")[0]))); });
+}
+
+function handleExcel(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const wb = XLSX.read(ev.target.result, { type:"array" });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+    const nd = makeEmptyData(); const mesMap = {};
+    rows.slice(0,3).forEach(row => MESES.forEach((m,mi) => row.forEach((cell,ci) => { if (String(cell||"").toLowerCase().includes(m.toLowerCase().slice(0,3))) mesMap[mi] = ci; })));
+    rows.forEach(row => { const c = matchConcepto(String(row[0]||"")); if (!c) return; Object.entries(mesMap).forEach(([mi,ci]) => { const v = num(row[ci]); if (v) nd[Number(mi)][c.id] = v; }); });
+    state.data = nd;
+    persist();
+    renderApp();
+    alert("Excel cargado.");
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function parseAI() {
+  if (!state.aiText.trim()) return;
+  state.aiLoading = true; state.aiResult = null; renderApp();
+  try {
+    // NOTA: este endpoint requiere un proxy; fuera del artefacto de Claude no funciona directo desde browser por CORS.
+    // Si querés IA en producción, te paso después una mini función serverless o un proxy.
+    throw new Error("La función IA solo funciona dentro del entorno Claude. Usá carga manual o Excel.");
+  } catch (err) {
+    alert(err.message);
+  }
+  state.aiLoading = false; renderApp();
+}
+function applyAI() {
+  if (!state.aiResult) return;
+  const mi = state.aiResult.mes != null ? state.aiResult.mes - 1 : state.mes;
+  Object.entries(state.aiResult.valores||{}).forEach(([k,v]) => { if (state.data[mi][k] !== undefined) state.data[mi][k] = v; });
+  if (state.aiResult.mes != null) state.mes = mi;
+  state.aiResult = null; state.aiText = ""; state.tab = "carga";
+  persist(); renderApp();
+}
+
+// ==================== BOOT ====================
+(async function boot() {
+  // auto-login si hay token guardado
+  if (state.token && state.user) {
+    renderLoading("Conectando con GitHub...");
+    try {
+      const res = await ghGet(state.token);
+      if (res.data) {
+        state.data = res.data.data || makeSeedData();
+        state.comentarios = res.data.comentarios || {};
+        state.updatedAt = res.data.updated_at || null;
+        state.updatedBy = res.data.updated_by || null;
+        state.sha = res.sha;
+      } else {
+        state.data = makeSeedData();
+        const payload = { data: state.data, comentarios: {}, updated_at: new Date().toISOString(), updated_by: state.user };
+        const put = await ghPut(state.token, payload, null, `[${state.user}] inicialización`);
+        state.sha = put.content.sha;
+        state.updatedAt = payload.updated_at;
+        state.updatedBy = state.user;
+      }
+      state.auth = true;
+      renderApp();
+      return;
+    } catch (err) {
+      renderLogin("Token inválido o repo no encontrado: " + err.message);
+      return;
+    }
+  }
+  renderLogin();
+})();
+</script>
+</body>
+</html>
