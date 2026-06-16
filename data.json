@@ -106,7 +106,7 @@
       "cobro_ger": 560728
     },
     "3": {
-      "abonos": 0,
+      "abonos": "25190912",
       "deuda_ant": 0,
       "lc": 0,
       "proyectos": 0,
@@ -422,6 +422,6 @@
     }
   },
   "comentarios": {},
-  "updated_at": "2026-04-22T18:25:50.044Z",
+  "updated_at": "2026-06-16T20:30:24.005Z",
   "updated_by": "Gisela"
 }
