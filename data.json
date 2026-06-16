@@ -166,7 +166,7 @@
       "n8n": "38920.00",
       "contagram": "42265.00",
       "asana": "516978",
-      "limpieza": 0,
+      "limpieza": "54000.00",
       "contador": 0,
       "gtos_oficina": 0,
       "viajes": 0,
@@ -435,6 +435,6 @@
     "4_gamma": "READ IA",
     "4_asana": "CLAUDE"
   },
-  "updated_at": "2026-06-16T20:47:23.742Z",
+  "updated_at": "2026-06-16T20:47:30.880Z",
   "updated_by": "Gisela"
 }
