@@ -144,7 +144,7 @@
       "abonos": "27306130",
       "deuda_ant": "1874832",
       "lc": "10887375.00",
-      "proyectos": "2389999",
+      "proyectos": "2390000.00",
       "sueldos": 0,
       "sueldos_socios": 0,
       "cargas_soc": 0,
@@ -428,6 +428,6 @@
     "3_asana": "CLAUDE",
     "3_gtos_rh": "3er Viernes al mes - Bolsas \"AVALON AWARD\" $73.700.-"
   },
-  "updated_at": "2026-06-16T20:40:44.272Z",
+  "updated_at": "2026-06-16T20:40:55.152Z",
   "updated_by": "Gisela"
 }
