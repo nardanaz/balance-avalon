@@ -113,7 +113,7 @@
       "sueldos": "23996824",
       "sueldos_socios": "5000000",
       "cargas_soc": "445904",
-      "logistica": 0,
+      "logistica": "29800",
       "partner": 0,
       "cursos": 0,
       "pub_meta": 0,
@@ -425,6 +425,6 @@
     "3_deuda_ant": "Codylsa, CEMED, GRUPO ERD, PURA MANTEQUILLA",
     "3_proyectos": "Be Recuiting, Sister, FZ Motos"
   },
-  "updated_at": "2026-06-16T20:33:01.001Z",
+  "updated_at": "2026-06-16T20:33:07.286Z",
   "updated_by": "Gisela"
 }
