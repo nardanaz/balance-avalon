@@ -421,7 +421,9 @@
       "cobro_ger": 1532505
     }
   },
-  "comentarios": {},
-  "updated_at": "2026-06-16T20:32:07.397Z",
+  "comentarios": {
+    "3_deuda_ant": "Codylsa, CEMED, GRUPO ERD, PURA MANTEQUILLA"
+  },
+  "updated_at": "2026-06-16T20:32:30.355Z",
   "updated_by": "Gisela"
 }
