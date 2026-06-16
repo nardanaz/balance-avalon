@@ -130,7 +130,7 @@
       "kommo": 0,
       "n8n": "39200",
       "contagram": "87156",
-      "asana": 0,
+      "asana": "516978",
       "limpieza": 0,
       "contador": 0,
       "gtos_oficina": 0,
@@ -427,6 +427,6 @@
     "3_partner": "500.000 Sister y Grupo Norte + 340.000 Thais y Viaticos + 150 Diego",
     "3_asana": "CLAUDE"
   },
-  "updated_at": "2026-06-16T20:36:31.898Z",
+  "updated_at": "2026-06-16T20:36:33.964Z",
   "updated_by": "Gisela"
 }
