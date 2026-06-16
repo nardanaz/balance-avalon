@@ -136,7 +136,7 @@
       "gtos_oficina": "1230231",
       "viajes": 0,
       "gtos_rh": "411200",
-      "caja_chica": "00004",
+      "caja_chica": "",
       "deudores_pp": 0,
       "cobro_ger": 0
     },
@@ -428,6 +428,6 @@
     "3_asana": "CLAUDE",
     "3_gtos_rh": "3er Viernes al mes - Bolsas \"AVALON AWARD\" $73.700.-"
   },
-  "updated_at": "2026-06-16T20:37:16.494Z",
+  "updated_at": "2026-06-16T20:37:19.027Z",
   "updated_by": "Gisela"
 }
