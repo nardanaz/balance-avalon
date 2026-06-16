@@ -148,7 +148,7 @@
       "sueldos": "27399446",
       "sueldos_socios": "5000000",
       "cargas_soc": "446027.16",
-      "logistica": 0,
+      "logistica": "62800.00",
       "partner": 0,
       "cursos": 0,
       "pub_meta": 0,
@@ -431,6 +431,6 @@
     "4_deuda_ant": "Patagonia Natural, Pura Mantequilla, Estetica Inolvidable, Victoria M",
     "4_proyectos": "FZ Motos - Bomberos Filmacion - Leaders Filmacion - BUTTER AND CRUM - Sitio Web Adelanto "
   },
-  "updated_at": "2026-06-16T20:42:13.828Z",
+  "updated_at": "2026-06-16T20:42:20.278Z",
   "updated_by": "Gisela"
 }
