@@ -110,7 +110,7 @@
       "deuda_ant": "6303309",
       "lc": "12294995.60",
       "proyectos": "2259200",
-      "sueldos": 0,
+      "sueldos": "23996824",
       "sueldos_socios": 0,
       "cargas_soc": 0,
       "logistica": 0,
@@ -425,6 +425,6 @@
     "3_deuda_ant": "Codylsa, CEMED, GRUPO ERD, PURA MANTEQUILLA",
     "3_proyectos": "Be Recuiting, Sister, FZ Motos"
   },
-  "updated_at": "2026-06-16T20:32:37.926Z",
+  "updated_at": "2026-06-16T20:32:49.115Z",
   "updated_by": "Gisela"
 }
