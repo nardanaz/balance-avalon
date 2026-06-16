@@ -169,7 +169,7 @@
       "limpieza": "54000.00",
       "contador": "1686409.00",
       "gtos_oficina": "1278990.00",
-      "viajes": 0,
+      "viajes": "49600.00",
       "gtos_rh": 0,
       "caja_chica": 0,
       "deudores_pp": 0,
@@ -435,6 +435,6 @@
     "4_gamma": "READ IA",
     "4_asana": "CLAUDE"
   },
-  "updated_at": "2026-06-16T20:47:45.269Z",
+  "updated_at": "2026-06-16T20:47:51.059Z",
   "updated_by": "Gisela"
 }
