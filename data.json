@@ -132,7 +132,7 @@
       "contagram": "87156",
       "asana": "516978",
       "limpieza": "70000",
-      "contador": 0,
+      "contador": "1231384",
       "gtos_oficina": 0,
       "viajes": 0,
       "gtos_rh": 0,
@@ -427,6 +427,6 @@
     "3_partner": "500.000 Sister y Grupo Norte + 340.000 Thais y Viaticos + 150 Diego",
     "3_asana": "CLAUDE"
   },
-  "updated_at": "2026-06-16T20:36:46.939Z",
+  "updated_at": "2026-06-16T20:36:53.402Z",
   "updated_by": "Gisela"
 }
