@@ -108,7 +108,7 @@
     "3": {
       "abonos": "25190912",
       "deuda_ant": "6303309",
-      "lc": 0,
+      "lc": "12294995.60",
       "proyectos": 0,
       "sueldos": 0,
       "sueldos_socios": 0,
@@ -422,6 +422,6 @@
     }
   },
   "comentarios": {},
-  "updated_at": "2026-06-16T20:31:48.583Z",
+  "updated_at": "2026-06-16T20:31:57.376Z",
   "updated_by": "Gisela"
 }
