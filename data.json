@@ -215,7 +215,7 @@
       "deuda_ant": "",
       "lc": "",
       "proyectos": "",
-      "sueldos": "37353457.90",
+      "sueldos": "",
       "sueldos_socios": "7500000.00",
       "cargas_soc": "661483.79",
       "logistica": "80700.00",
@@ -451,6 +451,6 @@
     "5_sueldos_socios": "SAC Junio",
     "5_partner": "Diego 462 usd + Ivan Viaticos "
   },
-  "updated_at": "2026-07-17T16:57:49.303Z",
+  "updated_at": "2026-07-17T16:57:57.004Z",
   "updated_by": "Gisela"
 }
