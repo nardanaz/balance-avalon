@@ -239,7 +239,7 @@
       "limpieza": "54000.00",
       "contador": "1289932.00",
       "gtos_oficina": "1311766.00",
-      "viajes": 0,
+      "viajes": "301389.00",
       "gtos_rh": 0,
       "caja_chica": 0,
       "deudores_pp": 0,
@@ -444,6 +444,6 @@
     "6_partner": "Diego 462 usd + Ivan Viaticos ",
     "6_webs": "READ IA"
   },
-  "updated_at": "2026-07-17T16:53:25.716Z",
+  "updated_at": "2026-07-17T16:53:32.211Z",
   "updated_by": "Gisela"
 }
