@@ -221,7 +221,7 @@
       "logistica": "",
       "partner": "",
       "cursos": 0,
-      "pub_meta": "1013055",
+      "pub_meta": "",
       "pub_google": "1431697",
       "gsuite": "477120.00",
       "dashbo": 0,
@@ -453,6 +453,6 @@
     "5_webs": "READ IA",
     "5_n8n": "Claude equipo"
   },
-  "updated_at": "2026-07-17T17:00:16.918Z",
+  "updated_at": "2026-07-17T17:00:24.129Z",
   "updated_by": "Gisela"
 }
