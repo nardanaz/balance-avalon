@@ -211,7 +211,7 @@
       "cobro_ger": 0
     },
     "6": {
-      "abonos": "28934012.00",
+      "abonos": "",
       "deuda_ant": "1457000.00",
       "lc": "11417960.00",
       "proyectos": "1410060.00",
@@ -448,6 +448,6 @@
     "5_abonos": "Deudores: Tallon / Openn  - Bonificado: Become / Best Calafate (- $4,5M)",
     "5_deuda_ant": "Pura Mantequilla, Grupo ERD"
   },
-  "updated_at": "2026-07-17T16:56:05.333Z",
+  "updated_at": "2026-07-17T16:56:18.225Z",
   "updated_by": "Gisela"
 }
