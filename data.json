@@ -183,7 +183,7 @@
       "sueldos": "37353457.90",
       "sueldos_socios": "7500000.00",
       "cargas_soc": "661483.79",
-      "logistica": 0,
+      "logistica": "661483.79",
       "partner": 0,
       "cursos": 0,
       "pub_meta": 0,
@@ -450,6 +450,6 @@
     "5_sueldos": "SAC Junio",
     "5_sueldos_socios": "SAC Junio"
   },
-  "updated_at": "2026-07-17T16:57:05.753Z",
+  "updated_at": "2026-07-17T16:57:14.332Z",
   "updated_by": "Gisela"
 }
