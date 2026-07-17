@@ -178,7 +178,7 @@
     "5": {
       "abonos": "28934012.00",
       "deuda_ant": "1457000.00",
-      "lc": 0,
+      "lc": "1457000.00",
       "proyectos": 0,
       "sueldos": 0,
       "sueldos_socios": 0,
@@ -446,6 +446,6 @@
     "6_viajes": "Tizi Viaticos filmacion Garden Free - May Che bonche 80.617 - Viaticos Caro Lycee + clima store",
     "6_gtos_rh": "Vino clientes - Registro de Marca - Botellas y Regalos IA Challenge - 3er Viernes + Cumple May"
   },
-  "updated_at": "2026-07-17T16:55:02.017Z",
+  "updated_at": "2026-07-17T16:55:09.028Z",
   "updated_by": "Gisela"
 }
