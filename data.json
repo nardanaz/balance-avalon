@@ -205,7 +205,7 @@
       "contador": "1289932.00",
       "gtos_oficina": "1289932.00",
       "viajes": "301389.00",
-      "gtos_rh": 0,
+      "gtos_rh": "1166097.00",
       "caja_chica": 0,
       "deudores_pp": 0,
       "cobro_ger": 0
@@ -454,6 +454,6 @@
     "5_n8n": "Claude equipo",
     "5_viajes": "Tizi Viaticos filmacion Garden Free - May Che bonche 80.617 - Viaticos Caro Lycee + clima store"
   },
-  "updated_at": "2026-07-17T17:01:36.077Z",
+  "updated_at": "2026-07-17T17:01:50.576Z",
   "updated_by": "Gisela"
 }
