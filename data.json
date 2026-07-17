@@ -234,7 +234,7 @@
       "manychat": "",
       "kommo": 0,
       "n8n": "",
-      "contagram": "67156.00",
+      "contagram": "",
       "asana": 0,
       "limpieza": "54000.00",
       "contador": "1289932.00",
@@ -453,6 +453,6 @@
     "5_webs": "READ IA",
     "5_n8n": "Claude equipo"
   },
-  "updated_at": "2026-07-17T17:00:33.018Z",
+  "updated_at": "2026-07-17T17:00:34.154Z",
   "updated_by": "Gisela"
 }
