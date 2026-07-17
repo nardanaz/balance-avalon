@@ -216,7 +216,7 @@
       "lc": "11417960.00",
       "proyectos": "1410060.00",
       "sueldos": "37353457.90",
-      "sueldos_socios": 0,
+      "sueldos_socios": "7500000.00",
       "cargas_soc": 0,
       "logistica": 0,
       "partner": 0,
@@ -441,6 +441,6 @@
     "6_deuda_ant": "Pura Mantequilla, Grupo ERD",
     "6_sueldos": "SAC Junio"
   },
-  "updated_at": "2026-07-17T16:49:19.880Z",
+  "updated_at": "2026-07-17T16:49:25.314Z",
   "updated_by": "Gisela"
 }
