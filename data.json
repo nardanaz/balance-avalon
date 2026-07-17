@@ -218,8 +218,8 @@
       "sueldos": "",
       "sueldos_socios": "",
       "cargas_soc": "",
-      "logistica": "80700.00",
-      "partner": "882040.00",
+      "logistica": "",
+      "partner": "",
       "cursos": 0,
       "pub_meta": "1013055",
       "pub_google": "1431697",
@@ -451,6 +451,6 @@
     "5_sueldos_socios": "SAC Junio",
     "5_partner": "Diego 462 usd + Ivan Viaticos "
   },
-  "updated_at": "2026-07-17T16:58:00.650Z",
+  "updated_at": "2026-07-17T16:58:10.692Z",
   "updated_by": "Gisela"
 }
