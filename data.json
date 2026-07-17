@@ -183,7 +183,7 @@
       "sueldos": "37353457.90",
       "sueldos_socios": "7500000.00",
       "cargas_soc": "661483.79",
-      "logistica": "661483.79",
+      "logistica": "80700.00",
       "partner": "882040.00",
       "cursos": 0,
       "pub_meta": "1013055",
@@ -455,6 +455,6 @@
     "5_viajes": "Tizi Viaticos filmacion Garden Free - May Che bonche 80.617 - Viaticos Caro Lycee + clima store",
     "5_gtos_rh": "Vino clientes - Registro de Marca - Botellas y Regalos IA Challenge - 3er Viernes + Cumple May"
   },
-  "updated_at": "2026-07-17T17:03:00.002Z",
+  "updated_at": "2026-07-17T17:03:37.443Z",
   "updated_by": "Gisela"
 }
