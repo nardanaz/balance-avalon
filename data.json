@@ -203,7 +203,7 @@
       "asana": 0,
       "limpieza": "54000.00",
       "contador": "1289932.00",
-      "gtos_oficina": "1289932.00",
+      "gtos_oficina": "1311766.00",
       "viajes": "301389.00",
       "gtos_rh": "1166097.00",
       "caja_chica": 0,
@@ -455,6 +455,6 @@
     "5_viajes": "Tizi Viaticos filmacion Garden Free - May Che bonche 80.617 - Viaticos Caro Lycee + clima store",
     "5_gtos_rh": "Vino clientes - Registro de Marca - Botellas y Regalos IA Challenge - 3er Viernes + Cumple May"
   },
-  "updated_at": "2026-07-17T17:02:07.397Z",
+  "updated_at": "2026-07-17T17:03:00.002Z",
   "updated_by": "Gisela"
 }
