@@ -201,7 +201,7 @@
       "n8n": "556738",
       "contagram": "67156.00",
       "asana": 0,
-      "limpieza": 0,
+      "limpieza": "54000.00",
       "contador": 0,
       "gtos_oficina": 0,
       "viajes": 0,
@@ -453,6 +453,6 @@
     "5_webs": "READ IA",
     "5_n8n": "Claude equipo"
   },
-  "updated_at": "2026-07-17T17:00:34.154Z",
+  "updated_at": "2026-07-17T17:00:48.446Z",
   "updated_by": "Gisela"
 }
