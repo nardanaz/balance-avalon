@@ -217,7 +217,7 @@
       "proyectos": "1410060.00",
       "sueldos": "37353457.90",
       "sueldos_socios": "7500000.00",
-      "cargas_soc": 0,
+      "cargas_soc": "661483.79",
       "logistica": 0,
       "partner": 0,
       "cursos": 0,
@@ -442,6 +442,6 @@
     "6_sueldos": "SAC Junio",
     "6_sueldos_socios": "SAC Junio"
   },
-  "updated_at": "2026-07-17T16:49:30.401Z",
+  "updated_at": "2026-07-17T16:49:36.325Z",
   "updated_by": "Gisela"
 }
