@@ -191,7 +191,7 @@
       "gsuite": "477120.00",
       "dashbo": 0,
       "linkedin": "83810.00",
-      "webs": 0,
+      "webs": "83810.00",
       "gamma": 0,
       "luma": 0,
       "envialosimple": 0,
@@ -451,6 +451,6 @@
     "5_sueldos_socios": "SAC Junio",
     "5_partner": "Diego 462 usd + Ivan Viaticos "
   },
-  "updated_at": "2026-07-17T16:58:54.980Z",
+  "updated_at": "2026-07-17T16:58:57.429Z",
   "updated_by": "Gisela"
 }
