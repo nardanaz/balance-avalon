@@ -212,7 +212,7 @@
     },
     "6": {
       "abonos": "28934012.00",
-      "deuda_ant": 0,
+      "deuda_ant": "1457000.00",
       "lc": 0,
       "proyectos": 0,
       "sueldos": 0,
@@ -439,6 +439,6 @@
     "4_caja_chica": "super",
     "6_abonos": "Deudores: Tallon / Openn  - Bonificado: Become / Best Calafate (- $4,5M)"
   },
-  "updated_at": "2026-07-17T16:46:33.766Z",
+  "updated_at": "2026-07-17T16:46:39.789Z",
   "updated_by": "Gisela"
 }
